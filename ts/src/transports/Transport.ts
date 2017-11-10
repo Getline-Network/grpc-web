@@ -70,6 +70,10 @@ export class DefaultTransportFactory {
       return fetchRequest;
     }
 
+    if (typeof module !== "undefined" && module.exports) {
+      return httpNodeTransport;
+    }
+
     if (typeof XMLHttpRequest !== "undefined") {
       if (xhrSupportsResponseType("moz-chunked-arraybuffer")) {
         return mozXhrRequest;
@@ -78,10 +82,6 @@ export class DefaultTransportFactory {
       if (XMLHttpRequest.prototype.hasOwnProperty("overrideMimeType")) {
         return xhrRequest;
       }
-    }
-
-    if (typeof module !== "undefined" && module.exports) {
-      return httpNodeTransport;
     }
 
     throw new Error("No suitable transport found for gRPC-Web");
